@@ -15,7 +15,73 @@
 
   Once you've implemented the logic, test your code by running
 */
+class Calculator {
+  constructor() {
+    this.result = 0;
+  }
 
-class Calculator {}
+  add(num) {
+    this.result += num;
+  }
+
+  subtract(num) {
+    this.result -= num;
+  }
+
+  multiply(num) {
+    this.result *= num;
+  }
+
+  divide(num) {
+    if (num === 0) {
+      throw new Error("Division by zero");
+    }
+    this.result /= num;
+  }
+
+  clear() {
+    this.result = 0;
+  }
+
+  getResult() {
+    return this.result;
+  }
+
+  evaluateExpression(str) {
+    let stack = [];
+    for (let ch of str) {
+      if (ch === '(') {
+        stack.push(ch);
+      } else if (ch === ')') {
+        if (stack.length === 0) {
+          throw new Error("Unbalanced parentheses");
+        }
+        stack.pop();
+      }
+    }
+    if (stack.length > 0) {
+      throw new Error("Unbalanced parentheses");
+    }
+
+    try {
+      return eval(str);
+    } catch (e) {
+      throw new Error("Invalid expression");
+    }
+  }
+
+  calculate(str) {
+    str = str.replace(/\s+/g, "");
+    if (/[^0-9+\-*/().]/.test(str)) {
+      throw new Error("Invalid characters in expression");
+    }
+
+    this.result = this.evaluateExpression(str);
+    if (this.result === Infinity || this.result === -Infinity) {
+      throw new Error("Division by zero");
+    }
+  }
+
+}
 
 module.exports = Calculator;
